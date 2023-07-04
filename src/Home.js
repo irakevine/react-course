@@ -1,38 +1,36 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import BlogList from "./BlogList";
 
 const Home = () => {
-  const [blogs, setBlogs] = useState([
-    {
-      title: "my new website",
-      body: "gtloremkngklgbvcdtterehgjdhhf",
-      author: "nevillen",
-      id: 1,
-    },
-    {
-      title: "welcome Party",
-      body: "rhtlortemmmjjhugdhtrefdfgfgdrtt5",
-      author: "renaike",
-      id: 2,
-    },
-    {
-      title: "my new website",
-      body: "hekhillouytuyuhhyriruirgrrew",
-      author: "nevie",
-      id: 3,
-    },
-  ]);
+  const [blogs, setBlogs] = useState(null);
   const handleDelete = (id) => {
     const newBlogs = blogs.filter((blog) => blog.id !== id);
     setBlogs(newBlogs);
-  }
-   useEffect(()=>{
-    console.log('use effect ran');
-    console.log(blogs);
-   });
+  };
+  const [name, setName] = useState("kellen");
+
+  useEffect(() => {
+    fetch("https://my-brand-frontend.onrender.com/myapi/blog")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data.data);
+        setBlogs(data.data);
+        return data;
+      });
+  }, []);
   return (
     <div className="home">
-      <BlogList blogs={blogs} title="All Blogs!" handleDelete={handleDelete} />
+      {blogs && (
+        <BlogList
+          blogs={blogs}
+          title="All Blogs!"
+          handleDelete={handleDelete}
+        />
+      )}
+      <button onClick={() => setName("kevine")}>changeName</button>
+      <p>{name}</p>
     </div>
   );
 };
